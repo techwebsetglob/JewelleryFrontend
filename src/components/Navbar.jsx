@@ -105,7 +105,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Dropdown - Full Screen Overlay */}
       <div 
-        className={`lg:hidden fixed inset-0 top-0 pt-24 bg-black/95 backdrop-blur-xl transition-all duration-400 ease-in-out z-40 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`lg:hidden fixed inset-0 top-0 pt-24 bg-black backdrop-blur-xl transition-all duration-400 ease-in-out z-40 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       >
         <nav className="flex flex-col items-center justify-center h-full pb-32 gap-8 text-center">
           <Link to="/shop" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100/90 hover:text-primary transition-colors hover:scale-110 transform">Shop</Link>
