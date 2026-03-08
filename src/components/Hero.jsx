@@ -41,10 +41,6 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-10 z-40 flex flex-col items-center gap-2">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60">Scroll to Discover</span>
-        <div className="h-12 w-[1px] bg-gradient-to-b from-primary/60 to-transparent"></div>
-      </div>
     </main>
   );
 };

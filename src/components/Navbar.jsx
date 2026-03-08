@@ -14,6 +14,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      closeMobileMenu();
       setIsUserMenuOpen(false);
       navigate('/');
     } catch (error) {
@@ -21,18 +22,29 @@ const Navbar = () => {
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    document.body.classList.toggle('menu-open', !isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    document.body.classList.remove('menu-open');
+  };
+
   return (
     <header className="fixed top-0 z-50 w-full px-6 py-4 lg:px-20 transition-all duration-300 glass-nav">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between">
         <div className="flex items-center gap-4 md:gap-12 w-full lg:w-auto justify-between lg:justify-start">
-          {/* Mobile Menu Button - Left aligned on mobile */}
+          {/* Mobile Menu Button (Hamburger) */}
           <button 
-            className="lg:hidden text-primary focus:outline-none z-50 relative"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`hamburger lg:hidden ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle navigation menu"
           >
-            <span className="material-symbols-outlined text-3xl">
-              {isMobileMenuOpen ? 'close' : 'menu'}
-            </span>
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
 
           {/* Logo - Centered on mobile, absolute positioned */}
@@ -103,32 +115,32 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown - Full Screen Overlay */}
+      {/* Mobile Menu Dropdown - Slide Panel */}
       <div 
-        className={`lg:hidden fixed inset-0 top-0 pt-32 bg-background-dark backdrop-blur-3xl transition-all duration-500 ease-in-out z-40 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'}`}
+        className={`lg:hidden nav-menu-panel absolute top-full left-0 w-full bg-background-dark/95 backdrop-blur-xl border-t border-primary/20 ${isMobileMenuOpen ? 'open' : ''}`}
+        style={{ padding: isMobileMenuOpen ? '20px 24px' : '0 24px' }}
       >
-        <nav className="flex flex-col items-center justify-center h-full pb-32 gap-8 text-center bg-background-dark/80 w-full">
-          <Link to="/shop" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Shop</Link>
-          <a href="/#gallery" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Collections</a>
-          <a href="/#heritage" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Heritage</a>
-          <a href="/#consultation" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Bespoke</a>
-          <Link to="/track" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-primary hover:text-white transition-colors hover:scale-110 transform">Track Order</Link>
-          <div className="w-12 h-[1px] bg-primary/30 my-4"></div>
+        <nav className="flex flex-col w-full">
+          <Link to="/shop" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-slate-100 font-bold uppercase tracking-[0.2em] transition-all">Shop</Link>
+          <a href="/#gallery" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-slate-100 font-bold uppercase tracking-[0.2em] transition-all">Collections</a>
+          <a href="/#heritage" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-slate-100 font-bold uppercase tracking-[0.2em] transition-all">Heritage</a>
+          <a href="/#consultation" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-slate-100 font-bold uppercase tracking-[0.2em] transition-all">Bespoke</a>
+          <Link to="/track" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-primary font-bold uppercase tracking-[0.2em] transition-all">Track Order</Link>
+          
+          <div className="w-full h-[1px] bg-primary/20 my-4"></div>
+          
           {currentUser ? (
             <>
-              <Link to="/account" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-primary hover:scale-110 transform transition-all">My Account</Link>
+              <Link to="/account" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 border-b border-black/10 hover:bg-white/5 rounded-lg px-4 text-primary font-bold uppercase tracking-[0.2em] transition-all">My Account</Link>
               <button 
-                onClick={() => {
-                  handleLogout();
-                  setIsMobileMenuOpen(false);
-                }} 
-                className="text-xs font-bold uppercase tracking-[0.3em] text-red-400 hover:scale-110 transform transition-all"
+                onClick={handleLogout} 
+                className="w-full text-left text-[1.1rem] py-4 hover:bg-white/5 rounded-lg px-4 text-red-400 font-bold uppercase tracking-[0.2em] transition-all"
               >
                 Logout
               </button>
             </>
           ) : (
-             <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-primary hover:scale-110 transform transition-all">Sign In</Link>
+             <Link to="/login" onClick={closeMobileMenu} className="w-full text-[1.1rem] py-4 hover:bg-white/5 rounded-lg px-4 text-primary font-bold uppercase tracking-[0.2em] transition-all">Sign In</Link>
           )}
         </nav>
       </div>
