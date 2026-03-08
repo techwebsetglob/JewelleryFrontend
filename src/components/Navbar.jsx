@@ -105,13 +105,13 @@ const Navbar = () => {
 
       {/* Mobile Menu Dropdown - Full Screen Overlay */}
       <div 
-        className={`lg:hidden fixed inset-0 top-0 pt-24 bg-black backdrop-blur-xl transition-all duration-400 ease-in-out z-40 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`lg:hidden fixed inset-0 top-0 pt-32 bg-background-dark backdrop-blur-3xl transition-all duration-500 ease-in-out z-40 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'}`}
       >
-        <nav className="flex flex-col items-center justify-center h-full pb-32 gap-8 text-center">
-          <Link to="/shop" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100/90 hover:text-primary transition-colors hover:scale-110 transform">Shop</Link>
-          <a href="/#gallery" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100/90 hover:text-primary transition-colors hover:scale-110 transform">Collections</a>
-          <a href="/#heritage" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100/90 hover:text-primary transition-colors hover:scale-110 transform">Heritage</a>
-          <a href="/#consultation" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100/90 hover:text-primary transition-colors hover:scale-110 transform">Bespoke</a>
+        <nav className="flex flex-col items-center justify-center h-full pb-32 gap-8 text-center bg-background-dark/80 w-full">
+          <Link to="/shop" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Shop</Link>
+          <a href="/#gallery" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Collections</a>
+          <a href="/#heritage" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Heritage</a>
+          <a href="/#consultation" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-slate-100 hover:text-primary transition-colors hover:scale-110 transform">Bespoke</a>
           <Link to="/track" onClick={() => setIsMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-[0.3em] text-primary hover:text-white transition-colors hover:scale-110 transform">Track Order</Link>
           <div className="w-12 h-[1px] bg-primary/30 my-4"></div>
           {currentUser ? (
