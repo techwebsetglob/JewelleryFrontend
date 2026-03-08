@@ -144,9 +144,8 @@ export default function AurumChatBot() {
       {/* ── CHAT WINDOW ── */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-50 w-96 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+          className="fixed z-50 flex flex-col rounded-2xl overflow-hidden shadow-2xl chat-widget-panel"
           style={{
-            height: '580px',
             background: 'rgba(10,10,10,0.97)',
             border: '1px solid rgba(212,175,127,0.2)',
             backdropFilter: 'blur(24px)',
@@ -154,8 +153,7 @@ export default function AurumChatBot() {
           }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 flex-shrink-0"
-               style={{ borderBottom: '1px solid rgba(212,175,127,0.15)', background: 'rgba(212,175,127,0.04)' }}>
+          <div className="chat-header">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-black text-sm"
                    style={{ background: 'linear-gradient(135deg, #D4AF7F, #c49b6b)' }}>A</div>
@@ -174,19 +172,18 @@ export default function AurumChatBot() {
             </div>
             <div className="flex items-center gap-1">
               <button onClick={handleClear} title="New conversation"
-                      className="p-2 text-gray-600 hover:text-[#D4AF7F] transition-colors rounded-lg hover:bg-[#D4AF7F]/10">
+                      className="chat-close-btn p-2 text-gray-400 hover:text-[#D4AF7F] transition-colors">
                 <RotateCcw size={15} />
               </button>
               <button onClick={() => setOpen(false)}
-                      className="p-2 text-gray-600 hover:text-white transition-colors rounded-lg hover:bg-white/10">
+                      className="chat-close-btn p-2 text-gray-400 hover:text-white transition-colors">
                 <X size={17} />
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4"
-               style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(212,175,127,0.15) transparent' }}>
+          <div className="chat-messages" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(212,175,127,0.15) transparent' }}>
             {messages.map((msg, i) => <MessageBubble key={i} message={msg} />)}
             {loading && <TypingIndicator />}
 
@@ -194,12 +191,11 @@ export default function AurumChatBot() {
             {showQuickMessages && messages.length === 1 && !loading && (
               <div className="mt-1">
                 <p className="text-gray-600 text-xs mb-2 px-1 uppercase tracking-widest">Suggested</p>
-                <div className="flex flex-col gap-2">
+                <div className="chat-suggestions">
                   {QUICK_MESSAGES.map((msg, i) => (
                     <button key={i}
                             onClick={() => { setShowQuickMessages(false); handleSend(msg) }}
-                            className="text-left text-xs px-3 py-2.5 rounded-xl text-[#D4AF7F] hover:bg-[#D4AF7F]/10 transition-all"
-                            style={{ border: '1px solid rgba(212,175,127,0.2)' }}>
+                            className="chat-suggestion-item text-left text-xs text-[#D4AF7F] hover:bg-[#D4AF7F]/10">
                       {msg}
                     </button>
                   ))}
@@ -210,15 +206,19 @@ export default function AurumChatBot() {
           </div>
 
           {/* Input bar */}
-          <div className="flex-shrink-0 px-4 py-4"
-               style={{ borderTop: '1px solid rgba(212,175,127,0.1)' }}>
+          <div className="chat-input-area">
             <div className="flex gap-2 items-end">
               <textarea
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onFocus={() => {
+                  setTimeout(() => {
+                     inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                  }, 300);
+                }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
+                  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
                 }}
                 placeholder="Ask about our collection…"
                 rows={1}
@@ -267,6 +267,86 @@ export default function AurumChatBot() {
         @keyframes aurumBounce {
           0%,80%,100% { transform:translateY(0); }
           40%          { transform:translateY(-6px); }
+        }
+
+        /* Desktop specific overriding for floating panel */
+        .chat-widget-panel {
+          bottom: 96px;
+          right: 24px;
+          width: 384px;
+          height: 580px;
+        }
+
+        .chat-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 16px;
+          flex-shrink: 0;
+          border-bottom: 1px solid rgba(212,175,127,0.15);
+          background: rgba(212,175,127,0.04);
+        }
+
+        .chat-close-btn {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.05);
+          cursor: pointer;
+          touch-action: manipulation;
+        }
+
+        .chat-messages {
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          padding: 16px;
+        }
+
+        .chat-suggestions {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          padding: 0 4px 12px;
+        }
+
+        .chat-suggestion-item {
+          padding: 12px 14px;
+          border: 1px solid rgba(212,175,127,0.2);
+          border-radius: 10px;
+          font-size: 0.75rem;
+          cursor: pointer;
+          transition: background 0.2s ease;
+          white-space: normal;
+        }
+
+        .chat-input-area {
+          flex-shrink: 0;
+          position: sticky;
+          bottom: 0;
+          background: inherit;
+          padding: 12px 16px;
+          border-top: 1px solid rgba(212,175,127,0.2);
+        }
+
+        @media (max-width: 768px) {
+          .chat-widget-panel {
+            position: fixed;
+            bottom: 84px;
+            right: 12px;
+            left: 12px;
+            width: auto;
+            max-height: 65vh;
+            height: 65vh;
+          }
+          
+          .chat-input-area {
+            background: rgba(10,10,10,0.97); /* Match parent to prevent transparency issues */
+          }
         }
       `}</style>
     </>
