@@ -1,10 +1,39 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const footerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => {
+      if (footerRef.current) {
+        observer.unobserve(footerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <footer className="bg-background-dark py-12 px-6 lg:px-20 border-t border-primary/10 pt-16 md:pt-24 pb-12">
-      <div className="mx-auto flex max-w-[1440px] flex-col md:flex-row items-center justify-between gap-8 md:gap-8">
+    <footer ref={footerRef} className="site-footer relative bg-background-dark py-12 px-6 lg:px-20 border-t border-primary/10 pt-16 md:pt-24 pb-12 overflow-hidden">
+      <div className="footer-aurora"></div>
+      <div className="footer-diamond"></div>
+      
+      <div className="relative z-10 mx-auto flex max-w-[1440px] flex-col md:flex-row items-center justify-between gap-8 md:gap-8">
         <div className="flex items-center gap-2 text-primary">
           <span className="material-symbols-outlined text-xl md:text-2xl">diamond</span>
           <h2 className="font-serif text-lg md:text-xl font-bold tracking-widest text-primary shimmer-gold scroll-reveal">AURUM</h2>
@@ -20,7 +49,7 @@ const Footer = () => {
           <span className="material-symbols-outlined text-primary/60 cursor-pointer hover:text-primary text-xl">language</span>
         </div>
       </div>
-      <div className="mt-12 md:mt-8 text-center text-[10px] text-slate-100/20 uppercase tracking-[0.2em]">
+      <div className="relative z-10 mt-12 md:mt-8 text-center text-[10px] text-slate-100/20 uppercase tracking-[0.2em]">
         © 2024 AURUM Luxury Group. All rights reserved.
       </div>
     </footer>

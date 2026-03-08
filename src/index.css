@@ -302,3 +302,55 @@ body.menu-open {
     display: none;
   }
 }
+
+/* --- FOOTER AURORA & DIAMOND ANIMATION --- */
+.footer-aurora {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 127, 0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.5s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .footer-aurora {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.footer-diamond {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 1px solid rgba(212, 175, 127, 0.3);
+  box-shadow: 0 0 20px rgba(212, 175, 127, 0.2);
+  top: 50%;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+  transform: rotate(45deg) scale(0);
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* TRIGGERED STATE */
+.site-footer.visible .footer-aurora {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.site-footer.visible .footer-diamond {
+  transform: rotate(45deg) scale(1.5);
+  opacity: 1;
+}
